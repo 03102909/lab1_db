@@ -1,5 +1,7 @@
 export * from "./db.js";
 export * from "./unit-of-work.js";
+export * from "./types/models.js";
+export * from "./repositories/interfaces.js";
 export * from "./repositories/user.repository.js";
 export * from "./repositories/course.repository.js";
 export * from "./repositories/enrollment.repository.js";

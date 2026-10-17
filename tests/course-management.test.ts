@@ -41,15 +41,14 @@ describe("Repository + Unit of Work", () => {
 
     let courseId: number | null = null;
     try {
-      const created = await uow.courses.create(
-        `Rollback Course ${ts}`,
-        "Should never persist in DB",
-        "Testing",
-        2,
-      );
-      courseId = created.p_course_id;
+      courseId = await uow.courses.add({
+        title: `Rollback Course ${ts}`,
+        description: "Should never persist in DB",
+        category: "Testing",
+        instructorId: 2,
+      });
 
-      await uow.enrollments.enroll(9999999, courseId);
+      await uow.enrollments.add({ studentId: 9999999, courseId });
 
       await uow.commit();
       assert.fail("Expected exception from sp_enroll_student");
@@ -61,7 +60,7 @@ describe("Repository + Unit of Work", () => {
     if (courseId) {
       const checkUow = new UnitOfWork();
       await checkUow.begin();
-      const course = await checkUow.courses.findById(courseId);
+      const course = await checkUow.courses.getById(courseId);
       await checkUow.commit();
       assert.strictEqual(course, null, "Course was rolled back");
     }
