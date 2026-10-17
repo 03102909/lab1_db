@@ -15,12 +15,12 @@
 - **Тестування**: `quizzes`, `quiz_questions`, `answer_options`.
 - **Зворотний зв'язок**: `reviews` (відгуки та оцінки курсів).
 
-### Спеціальні поля:
+Спеціальні поля:
 
 - **Soft Delete** (`is_deleted`, `deleted_at`, `deleted_by`): у таблицях `users`, `courses`, `modules`, `lessons`. Дані не видаляються назавжди, а позначаються як видалені.
 - **Дата та автор останньої зміни** (`updated_at`, `updated_by`): у таблицях `users`, `courses`, `lessons`, `submissions`, `grades`.
 
-## 3. Об'єкти бази даних (SQL)
+## 3. Об'єкти бази даних
 
 - **Розрізи даних (Views) — 6 шт.** (`v_active_users`, `v_active_courses`, `v_course_details`, `v_student_enrollments`, `v_submission_grades`, `v_course_ratings`).
 - **Збережені процедури (Stored Procedures) — 10 шт.**: м'яке видалення та відновлення (`sp_soft_delete_user`, `sp_restore_user`, `sp_soft_delete_course`), запис на курс (`sp_enroll_student`), створення сутностей, оцінювання (`sp_grade_submission`).
@@ -30,7 +30,7 @@
   - **B-tree** (часткові індекси для швидкого пошуку за email, курсами, студентами).
   - **GIN** (повнотекстовий пошук за назвами курсів та контентом уроків).
 
-## 4. Робота з коду: Repository + Unit of Work
+## 4. Repository + Unit of Work
 
 - **Repository** (`UserRepository`, `CourseRepository`, `EnrollmentRepository`, `SubmissionRepository`): не роблять прямих `SELECT/INSERT` до базових таблиць — усі запити йдуть виключно через збережені процедури, функції та розрізи даних (Views).
 - **Unit of Work** (`UnitOfWork`): об'єднує декілька операцій в одну спільну транзакцію (`BEGIN / COMMIT / ROLLBACK`).
